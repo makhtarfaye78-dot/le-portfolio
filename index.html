@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Makhtar Faye | Portfolio</title>
+<meta name="description" content="Portfolio de Makhtar Faye, de la finance vers l'analyse de données / Portfolio of Makhtar Faye, from finance to data analysis." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter+Tight:wght@500;600;800&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECE8E0; --sheet:#F3F0EA; --ink:#141414; --muted:#6D6A63;
+  --accent:#2A3F94; --vermilion:#C2432B;
+  --rule:rgba(20,20,20,.9); --ease:cubic-bezier(.2,.8,.2,1);
+  --H:min(47vh,33vw); --cy:41%;
+  --sans:"Inter Tight",system-ui,sans-serif; --serif:"Cormorant Garamond","Newsreader",Georgia,serif; --body:"Newsreader",Georgia,serif;
+}
+@media (max-width:767px){ :root{ --H:min(68vw,40svh); --cy:43%; } }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--paper)}
+body{font-family:var(--sans);color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+@media (pointer:fine){ html,body,button,a{cursor:none} }
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.lbl{font:600 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.box{display:inline-flex;align-items:center;height:21px;padding:0 8px;border:1px solid var(--rule)}
+
+/* paper grain */
+.grain{position:fixed;inset:0;z-index:40;pointer-events:none;mix-blend-mode:multiply;opacity:.6;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .38 0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* top bar */
+.top{position:fixed;top:0;left:0;right:0;height:76px;padding:0 36px;display:flex;align-items:center;justify-content:space-between;color:var(--accent);z-index:30}
+.tl{display:flex;align-items:center;gap:16px}
+.tl .ln{display:block;width:40px;height:1px;background:currentColor}
+.tr{display:flex;align-items:center;gap:30px}
+.lang{display:inline-flex;border:1px solid currentColor}
+.lang button{padding:7px 10px;font:600 10.5px/1 var(--sans);letter-spacing:.14em;color:var(--accent)}
+.lang button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.snd{display:inline-flex;align-items:center;gap:8px;border:1px solid currentColor;padding:6px 10px;color:var(--accent)}
+.snd .dot{width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor}
+.snd.on .dot{background:currentColor;animation:sndp 2.4s ease-in-out infinite}
+@keyframes sndp{50%{transform:scale(.6)}}
+@media (prefers-reduced-motion:reduce){.snd.on .dot{animation:none}}
+
+/* halftone words */
+.ht{position:fixed;z-index:1;writing-mode:vertical-rl;font-weight:800;line-height:1.02;letter-spacing:.02em;pointer-events:none;
+  color:transparent;-webkit-text-fill-color:transparent;
+  background:radial-gradient(circle at 50% 50%,rgba(64,82,138,.55) 0 36%,transparent 40%) 0 0/3px 3px,linear-gradient(rgba(110,122,160,.26),rgba(110,122,160,.26));
+  -webkit-background-clip:text;background-clip:text}
+.ht.l{left:2.4vw;top:13vh;font-size:min(11vh,7.4vw)}
+.ht.r{right:2.4vw;top:9vh;font-size:min(19vh,12.5vw)}
+@media (max-width:767px){ .ht{opacity:.8} .ht.l{font-size:11vw;top:11vh} .ht.r{font-size:20vw;top:9vh} }
+
+.floor{position:fixed;z-index:2;left:50%;transform:translateX(-50%);top:calc(var(--cy) + var(--H)*.47);width:min(96vw,calc(var(--H)*3.6));height:calc(var(--H)*.26);pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 40%,rgba(40,32,20,.30),rgba(40,32,20,.10) 55%,transparent 72%)}
+
+/* shelf */
+.shelf{position:fixed;left:0;right:0;top:calc(var(--cy) - var(--H)/2 - 50px);height:calc(var(--H) + 100px);perspective:1400px;perspective-origin:50% 50%;z-index:10;touch-action:pan-y}
+.stage{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.tape{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+.face{position:absolute;top:calc(var(--H)/-2);height:var(--H);backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px;overflow:hidden}
+.face svg{display:block;width:100%;height:100%}
+.face::after{content:"";position:absolute;inset:0;background:#000;opacity:var(--shade,0);pointer-events:none}
+.sp{width:var(--ws);left:calc(var(--ws)/-2);transform:translateZ(calc(var(--d)/2))}
+.cv{width:var(--d);left:calc(var(--d)/-2);transform:rotateY(90deg) translateZ(calc(var(--ws)/2));box-shadow:0 34px 60px -30px rgba(20,16,10,.6)}
+
+.play{position:fixed;z-index:14;width:42px;height:42px;border-radius:50%;border:1px solid var(--accent);background:rgba(236,232,224,.8);display:flex;align-items:center;justify-content:center;transform:scale(0);will-change:transform}
+.play i{display:block;width:0;height:0;border-left:12px solid var(--accent);border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+
+/* caption */
+.cap{position:fixed;z-index:12;left:50%;transform:translateX(-50%);top:calc(var(--cy) + var(--H)/2 + 4.2vh);display:grid;gap:10px;justify-items:center;pointer-events:none}
+.mask{position:relative;overflow:hidden;width:min(80vw,640px);text-align:center}
+.mask span{display:block;width:100%}
+.mask span.out{position:absolute;left:0;top:0}
+.c-title{font:700 clamp(30px,3.6vw,50px)/1.1 var(--serif);color:var(--accent);padding-bottom:.1em}
+.c-sub{color:var(--accent);font-size:9.5px;letter-spacing:.24em}
+.c-rule{width:18px;height:1px;background:var(--accent)}
+.c-year{font:500 10.5px/1.4 var(--sans);letter-spacing:.08em;color:var(--ink)}
+.arrow{position:fixed;z-index:14;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--accent);top:calc(var(--cy) + var(--H)/2 + 4.2vh - 2px)}
+.arrow.prev{left:calc(50% - min(19vw,250px) - 22px)} .arrow.next{left:calc(50% + min(19vw,250px) - 22px)}
+.arrow svg{width:24px;height:12px;stroke:currentColor;fill:none;stroke-width:1.2}
+
+/* timeline */
+.tline{position:fixed;z-index:14;left:36px;right:36px;bottom:64px;height:40px;color:var(--accent)}
+.tline .axis{position:absolute;left:0;right:0;top:12px;height:1px;background:currentColor;opacity:.75}
+.tline .tk{position:absolute;top:12px;width:1px;background:currentColor;opacity:.4;height:7px}
+.tline .tk.mj{height:13px;opacity:.75}
+.tline .tn{position:absolute;top:30px;font:500 9.5px/1 var(--sans);letter-spacing:.06em;transform:translateX(-50%);white-space:nowrap}
+.tline .tn:first-of-type{transform:none} .tline .tn.last{transform:translateX(-100%)}
+.tline .dot{position:absolute;top:12px;width:9px;height:9px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--accent)}
+.tline .hit{position:absolute;inset:-6px 0 -6px 0}
+
+.foot{position:fixed;z-index:14;left:36px;right:36px;bottom:24px;display:flex;justify-content:space-between;color:var(--accent)}
+.foot a{pointer-events:auto}
+
+/* cursor */
+.cur{position:fixed;left:0;top:0;width:58px;height:58px;margin:-29px 0 0 -29px;z-index:100;pointer-events:none;display:none;will-change:transform}
+@media (pointer:fine){ .cur{display:block} }
+.cur .ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--ink);background:transparent;transition:transform .5s var(--ease),background-color .4s var(--ease),border-color .4s var(--ease)}
+.cur .dot{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--ink);transition:transform .4s var(--ease)}
+.cur .lab{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font:600 10px/1.25 var(--sans);letter-spacing:.1em;transform:scale(0);transition:transform .45s var(--ease)}
+.cur.spine .ring{transform:scale(.72)}
+.cur.btn .ring{transform:scale(.55)} .cur.btn .dot{transform:scale(0)}
+.cur.open .ring{transform:scale(1.75);background:var(--accent);border-color:var(--accent)} .cur.open .dot{transform:scale(0)} .cur.open .lab{transform:scale(1)}
+
+/* ---------- detail sheet ---------- */
+.detail{position:fixed;inset:0;z-index:60;background:var(--sheet);visibility:hidden;overflow-x:hidden;overflow-y:auto}
+.detail .close{position:absolute;left:36px;top:28px;z-index:3;color:var(--accent);border-color:var(--accent);height:26px;padding:0 11px}
+.detail .brand{position:absolute;right:36px;top:26px;color:var(--accent);display:flex;align-items:center;gap:12px;z-index:3}
+.detail .brand i{display:block;width:34px;height:1px;background:currentColor}
+.dgrid{padding:104px 6vw 44px 7vw;min-height:100%;display:flex;flex-direction:column;gap:clamp(18px,3vh,34px);justify-content:center}
+.dm{overflow:hidden;padding-bottom:.12em}
+.dhead{display:flex;flex-direction:column;gap:12px}
+.d-sub{color:var(--accent)}
+.d-title{margin:0;font:700 clamp(40px,5.2vw,78px)/1 var(--serif);letter-spacing:-.01em;color:var(--accent)}
+.d-meta{color:var(--muted)}
+.dbody{display:flex;gap:clamp(20px,3vw,44px);align-items:flex-start}
+.dcover{flex:none;width:var(--cw);height:var(--ch);box-shadow:0 26px 50px -28px rgba(20,16,10,.55)}
+.dcover svg{display:block;width:100%;height:100%;overflow:visible}
+.dread{flex:none}
+.dctrl{display:flex;align-items:center;gap:18px;margin-top:16px;color:var(--accent)}
+.dctrl button{width:44px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);color:var(--accent)}
+.dctrl button:disabled{opacity:.3;pointer-events:none}
+.dctrl svg{width:22px;height:10px;stroke:currentColor;fill:none;stroke-width:1.3}
+
+.book{position:relative;width:var(--bw);height:var(--ph);perspective:2600px}
+.pbase,.leaf{position:absolute;top:0;width:var(--pw);height:var(--ph)}
+.leaf{transform-origin:left center;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.6,0,.2,1)}
+.pf,.pb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;background:#FBF8F1;border:1px solid rgba(20,20,20,.14)}
+.pf{border-radius:0 3px 3px 0;background-image:linear-gradient(90deg,rgba(20,16,10,.16),transparent 9%)}
+.pb{transform:rotateY(180deg);border-radius:3px 0 0 3px;background-image:linear-gradient(270deg,rgba(20,16,10,.16),transparent 9%)}
+.pbase{background:#F6F2E8;border:1px solid rgba(20,20,20,.14)}
+.pbase.bl{left:0;border-radius:3px 0 0 3px;background-image:linear-gradient(270deg,rgba(20,16,10,.16),transparent 9%)}
+.pbase.br{border-radius:0 3px 3px 0;background-image:linear-gradient(90deg,rgba(20,16,10,.16),transparent 9%)}
+.pgin{position:absolute;inset:0;padding:9% 9% 12% 10%;overflow:auto;font:400 clamp(11px,calc(var(--pw)/25),17px)/1.55 var(--body);color:#26231f;scrollbar-width:thin}
+.pgin.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.pgin p{margin:0 0 .8em}
+.pgin h3.pt.sm{font-size:14px;line-height:1.4;font-weight:600;margin:0 0 1em}
+.pgin:has(h3.pt.sm){padding-top:6.5%;padding-bottom:9%}
+.pgin .btns{display:flex;flex-wrap:wrap;gap:8px}
+.pgin .bx{margin:0 8px 6px 0}
+.pgin .rs{margin:0 0 1em;padding-top:.7em;border-top:1px solid rgba(20,20,20,.16)}
+.pgin .rs .rl{color:var(--accent);margin-bottom:.4em}
+.pgin .rs table{width:100%;border-collapse:collapse;margin:0 0 .8em}
+.pgin .rs th,.pgin .rs td{padding:.28em 0;border-bottom:1px solid rgba(20,20,20,.12);vertical-align:baseline;font-size:.88em}
+.pgin .rs th{text-align:left;font-weight:400;color:#55514a;padding-right:1em}
+.pgin .rs td{text-align:right;font:600 1.02em/1.2 var(--serif);color:#141414;white-space:nowrap}
+.pgin .rs td small{display:block;font:400 .72em/1.3 var(--sans);letter-spacing:.04em;color:#7a766e;margin-top:2px}
+.pgin .rs p.hk{font-size:.8em;line-height:1.5;margin:0;color:#3a3630;}
+.pe{color:var(--accent);margin-bottom:.9em;font-size:9.5px}
+.pt{margin:0 0 .7em;font:700 clamp(22px,calc(var(--pw)/12),38px)/1.05 var(--serif);color:#141414}
+.pgin ul{margin:0;padding:0 0 0 1.1em} .pgin li{margin-bottom:.55em}
+.tg{display:flex;flex-wrap:wrap;gap:.5em}
+.tg span{font:500 .72em/1 var(--sans);border:1px solid rgba(20,20,20,.3);border-radius:999px;padding:.55em 1em;color:#3a372f}
+.sub{font:500 .78em/1.3 var(--sans);color:var(--muted);margin:-.2em 0 1.1em}
+.period{font:600 .62em/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.role{font:700 1.35em/1.15 var(--serif);margin:.35em 0 .1em}
+.co{font:600 .62em/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.9em;display:block}
+.bx{display:inline-flex;align-items:center;gap:.8em;margin-top:.5em;padding:.8em 1.2em;border:1px solid var(--accent);color:var(--accent);font:600 .68em/1 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.bx:hover{background:var(--accent);color:#fff}
+.pcard{border-top:1px solid rgba(20,20,20,.2);padding-top:.8em;margin-top:.4em}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:.35em 1em;font-size:.88em;margin-top:1em}
+.facts b{font:600 .72em/1.9 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.folio{position:absolute;bottom:4.5%;font:500 9.5px/1 var(--sans);letter-spacing:.14em;color:var(--muted)}
+.pf .folio{right:9%} .pb .folio{left:10%}
+.mark{font:700 clamp(18px,calc(var(--pw)/14),28px)/1 var(--serif);color:var(--accent);letter-spacing:.04em}
+
+/* ---------- responsive ---------- */
+@media (max-width:767px){
+  .top{height:60px;padding:0 16px} .tl .ln,.tl #tSub,.tr .tx{display:none}
+  .tr{gap:12px}
+  .cap .c-title{font-size:30px}
+  .arrow{top:auto;bottom:118px} .arrow.prev{left:6px} .arrow.next{left:auto;right:6px}
+  .tline{left:16px;right:16px;bottom:54px} .tline .tn.alt{display:none}
+  .foot{left:16px;right:16px;bottom:18px;font-size:9px}
+  .detail .close{left:16px;top:21px} .detail .brand{right:16px} .detail .brand i,.detail .brand .bn{display:none}
+  .dgrid{padding:80px 22px 40px;justify-content:flex-start}
+  .dbody{flex-direction:column;align-items:center}
+  .d-title{font-size:42px}
+}
+@media (prefers-reduced-motion:reduce){ .leaf{transition:none} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="tl"><a class="lbl" href="#" id="tName">MAKHTAR FAYE</a><i class="ln"></i><span class="lbl" id="tSub"></span></div>
+  <nav class="tr">
+    <a class="lbl tx" id="cvTop" href="cv-makhtar-faye-fr.pdf" target="_blank" rel="noreferrer">CV</a>
+    <a class="lbl tx" href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">LINKEDIN</a>
+    <button type="button" class="snd" aria-pressed="false"><span class="dot"></span><span class="stx lbl">SON</span></button>
+    <div class="lang" role="group" aria-label="Language / Langue">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </nav>
+</header>
+
+<div class="ht l" aria-hidden="true">FINANCE</div>
+<div class="ht r" aria-hidden="true">DATA</div>
+<div class="floor"></div>
+
+<section class="shelf" id="shelf" aria-label="Portfolio">
+  <div class="stage" id="stage"></div>
+</section>
+<button class="play" id="play" aria-label="Open"><i></i></button>
+
+<div class="cap" aria-live="polite">
+  <div class="mask" id="mTitle"></div>
+  <div class="mask" id="mSub"></div>
+  <div class="c-rule"></div>
+  <div class="mask" id="mYear"></div>
+</div>
+<button class="arrow prev" id="prev" aria-label="Previous"><svg viewBox="0 0 24 12"><path d="M6 1L1 6l5 5M1 6h23"/></svg></button>
+<button class="arrow next" id="next" aria-label="Next"><svg viewBox="0 0 24 12"><path d="M18 1l5 5-5 5M23 6H0"/></svg></button>
+
+<div class="tline" id="tline"><div class="axis"></div><div class="dot" id="tdot"></div><div class="hit" id="thit"></div></div>
+
+<footer class="foot">
+  <span class="lbl" id="fLeft"></span>
+  <span class="lbl"><a href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">LINKEDIN</a> / <a href="mailto:mak.faye17@outlook.com">EMAIL</a></span>
+</footer>
+
+<div class="detail" id="detail" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="close box lbl" id="closeBtn"></button>
+  <div class="brand lbl"><span class="bn">MAKHTAR FAYE</span><i></i><span class="bn">PORTFOLIO</span><button type="button" class="snd" style="margin-left:12px" aria-pressed="false"><span class="dot"></span><span class="stx lbl">SON</span></button><div class="lang" role="group" aria-label="Language / Langue" style="margin-left:12px"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div></div>
+  <div class="dgrid">
+    <div class="dhead">
+      <div class="dm"><div class="rise lbl d-sub" id="dSub"></div></div>
+      <div class="dm"><h2 class="rise d-title" id="dTitle"></h2></div>
+      <div class="dm"><div class="rise lbl d-meta" id="dMeta"></div></div>
+    </div>
+    <div class="dbody">
+      <div class="dcover" id="dCover" aria-hidden="true"></div>
+      <div class="dm dread"><div class="rise" id="dRead"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cur" id="cur"><div class="ring"></div><div class="dot"></div><div class="lab"><span>OPEN<br>OUVRIR</span></div></div>
+<div class="grain"></div>
+
+<script>
+(function () {
+'use strict';
+var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var L = 'fr';
+function t(f, e) { return L === 'fr' ? f : e; }
+var SERIF = "'Cormorant Garamond','Newsreader',Georgia,serif", SANS = "'Inter Tight',system-ui,sans-serif";
+var INK = '#141414', ACC = '#2A3F94', VERM = '#C2432B', CREAM = '#EFE6D2', SAND = '#E2D5B5';
+
+/* ================= BOOKS ================= */
+var N = 6;
+var BK = [
+  { id: 'about',    sbg: '#5f6269' },
+  { id: 'skills',   sbg: '#151515' },
+  { id: 'exp',      sbg: '#0e0e0e' },
+  { id: 'edu',      sbg: '#6a4a38' },
+  { id: 'projects', sbg: '#0c0f09' },
+  { id: 'contact',  sbg: '#0f1d21' }
+];
+function meta(i) {
+  var M = [
+    { lines: t(['À PROPOS', 'DE MOI'], ['ABOUT', 'ME']), title: t('À propos de moi', 'About me'), sub: t('ABOUT ME', 'À PROPOS DE MOI'), tag: t('PROFIL', 'PROFILE'), nav: t('Profil', 'Profile') },
+    { lines: t(['COMPÉTENCES'], ['SKILLS']), title: t('Compétences', 'Skills'), sub: t('SKILLS', 'COMPÉTENCES'), tag: t('SAVOIR-FAIRE', 'KNOW-HOW'), nav: t('Compétences', 'Skills') },
+    { lines: t(['EXPÉRIENCE'], ['EXPERIENCE']), title: t('Expérience', 'Experience'), sub: t('EXPERIENCE', 'EXPÉRIENCE'), tag: t('PARCOURS', 'CAREER'), nav: t('Expérience', 'Experience') },
+    { lines: t(['FORMATION'], ['EDUCATION']), title: t('Formation', 'Education'), sub: t('EDUCATION', 'FORMATION'), tag: t('CURSUS', 'STUDIES'), nav: t('Formation', 'Education') },
+    { lines: t(['PROJETS'], ['PROJECTS']), title: t('Projets', 'Projects'), sub: t('PROJECTS', 'PROJETS'), tag: t('TRAVAUX', 'WORK'), nav: t('Projets', 'Projects') },
+    { lines: ['CONTACT'], title: 'Contact', sub: t('GET IN TOUCH', 'ÉCRIVEZ-MOI'), tag: t('ÉCHANGE', 'REACH OUT'), nav: 'Contact' }
+  ];
+  return M[i];
+}
+
+
+/* ================= COVER ART (SVG, screen-print style) ================= */
+function coverSVG(i, ink) {
+  var body = '<rect width="474" height="900" fill="#111"/><image href="covers/' + BK[i].id + '.jpg" x="0" y="0" width="474" height="900" preserveAspectRatio="xMidYMid slice"/>';
+  if (!ink) return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 474 900" preserveAspectRatio="none">' + body + '</svg>';
+  var circles = [[150, 330, 0], [340, 600, 120], [250, 120, 220], [90, 760, 300], [400, 250, 360], [260, 860, 420], [230, 470, 180]].map(function (c) {
+    return '<circle class="blob" cx="' + c[0] + '" cy="' + c[1] + '" r="0" data-d="' + c[2] + '" fill="#fff"/>';
+  }).join('');
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 474 900" preserveAspectRatio="none"><defs>' +
+    '<filter id="inkf" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="3" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="120" xChannelSelector="R" yChannelSelector="G"/></filter>' +
+    '<mask id="inkm" maskUnits="userSpaceOnUse" x="-200" y="-200" width="874" height="1300"><g filter="url(#inkf)">' + circles + '</g></mask></defs><g mask="url(#inkm)">' + body + '</g></svg>';
+}
+var SPV = [190, 400, 40, 520, 330, 470]; // which part of each cover shows on the spine
+function spineSVG(i) {
+  var b = BK[i], m = meta(i), f = '#F4EFE6', n = 1 + i;
+  var ttl = m.lines.join(' ');
+  var fs = ttl.length > 12 ? 31 : 37;
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142 840" preserveAspectRatio="none">' +
+    '<rect width="142" height="840" fill="' + b.sbg + '"/><rect x="0" y="0" width="142" height="22" fill="#000" opacity=".25"/><rect x="0" y="818" width="142" height="22" fill="#000" opacity=".25"/>' +
+    '<rect x="8" y="8" width="126" height="824" fill="none" stroke="' + f + '" stroke-opacity=".5" stroke-width="1.5"/>' +
+    '<svg x="14" y="30" width="114" height="114" viewBox="87 ' + SPV[i] + ' 300 300"><image href="covers/' + b.id + '.jpg" width="474" height="900" preserveAspectRatio="none"/></svg>' +
+    '<rect x="14" y="30" width="114" height="114" fill="none" stroke="' + f + '" stroke-opacity=".7" stroke-width="1.5"/>' +
+    '<text transform="translate(' + (71 - fs * 0.31) + ',200) rotate(90)" font-family="' + SERIF + '" font-weight="700" font-size="' + fs + '" letter-spacing="2" fill="' + f + '">' + ttl + '</text>' +
+    '<text transform="translate(78,664) rotate(90)" font-family="' + SANS + '" font-weight="600" font-size="14" letter-spacing="5" fill="' + f + '">FAYE</text>' +
+    '<rect x="34" y="728" width="74" height="46" fill="none" stroke="' + f + '" stroke-width="2"/><text x="71" y="759" text-anchor="middle" font-family="' + SANS + '" font-weight="600" font-size="20" letter-spacing="1" fill="' + f + '">N°' + n + '</text></svg>';
+}
+
+/* ================= BOOK CONTENT ================= */
+function tg(a) { return '<div class="tg">' + a.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>'; }
+function ul(a) { return '<ul>' + a.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>'; }
+function pg(eb, ti, inner) { return '<div class="pgin"><div class="lbl pe">' + eb + '</div><h3 class="pt">' + ti + '</h3>' + inner + '</div>'; }
+function pj(eb, ti, rl, rows, hook, href) {
+  var EN = document.documentElement.lang === 'en';
+  function num(x) { return EN ? String(x).replace(/(\d) (\d{3})/g, '$1,$2').replace(/(\d),(\d)/g, '$1.$2').replace(/(\d) %/g, '$1%').replace(/ à /g, ' to ') : x; }
+  rows = rows.map(function (r) { return [r[0], num(r[1]), r[2] || '']; });
+  var tb = rows.map(function (r) { return '<tr><th>' + r[0] + '</th><td>' + r[1] + (r[2] ? '<small>' + r[2] + '</small>' : '') + '</td></tr>'; }).join('');
+  return '<div class="pgin"><div class="lbl pe">' + eb + '</div><h3 class="pt sm">' + ti + '</h3><div class="rs"><div class="lbl rl">' + rl + '</div><table>' + tb + '</table><p class="hk">' + hook + '</p></div>' + [].concat(href).map(function (h) { return typeof h === 'string' ? pdfBtn(h, t('Ouvrir le PDF pour le détail', 'Open the PDF for the detail')) : pdfBtn(h[0], h[1]); }).join('') + '</div>';
+}
+function pdfBtn(href, label) { return '<a class="bx" href="' + href + '" target="_blank" rel="noreferrer">' + label + '</a>'; }
+function pages(i) {
+  var id = BK[i].id;
+  if (id === 'about') return [
+    pg(t('Profil', 'Profile'), t('Qui je suis', 'Who I am'),
+      '<p>' + t("Titulaire d'un Master en Gestion des Institutions Financières (Université Cheikh Anta Diop, ESP Dakar), je suis assistant financier stagiaire chez Fortesa International Sénégal, une entreprise pétrolière.",
+        "I hold a Master's degree in Financial Institutions Management (Cheikh Anta Diop University, ESP Dakar) and work as a Financial Assistant Intern at Fortesa International Senegal, an oil company.") + '</p>' +
+      '<div class="facts"><b>' + t('Lieu', 'Based in') + '</b><span>' + t('Dakar, Sénégal', 'Dakar, Senegal') + '</span><b>' + t('Poste', 'Role') + '</b><span>' + t('Assistant financier stagiaire', 'Financial Assistant Intern') + '</span><b>' + t('Diplôme', 'Degree') + '</b><span>' + t('Master en Gestion des Institutions Financières', "Master's in Financial Institutions Management") + '</span></div>'),
+    pg(t('Cap', 'Direction'), t('Atouts et objectif', 'Strengths and goal'), ul([
+      t("Poste visé : junior financier ou analyste financier.", "Target role: junior finance or financial analyst."),
+      t("Atouts : logique et rigueur.", "Strengths: logic and rigour."),
+      t("Excel avancé (hors macros) et Sage pour vérifier des données.", "Advanced Excel (no macros) and Sage for checking data."),
+      t("Python en autodidacte, niveau scripts, pour évoluer vers l'analyse de données.", "Self-taught Python at script level, to move towards data analysis."),
+      t("Langues : français C2, anglais B2, wolof courant.", "Languages: French C2, English B2, Wolof fluent.")
+    ]))
+  ];
+  if (id === 'skills') return [
+    pg(t('Études', 'Studies'), t('Finance et banque', 'Finance and banking'), '<p class="sub">' + t('Connaissances acquises en cours', 'Knowledge acquired through coursework') + '</p>' +
+      tg(t(["Analyse d'états financiers", 'Analyse de crédit', 'Gestion des risques', 'Analyse de ratios', 'Institutions financières', 'Opérations bancaires'],
+        ['Financial statement analysis', 'Credit analysis', 'Risk management', 'Ratio analysis', 'Financial institutions', 'Banking operations']))),
+    pg(t('Terrain', 'On the job'), t('Pratique en entreprise', 'Hands-on experience'), '<p class="sub">' + t('Missions menées chez Fortesa', 'Duties carried out at Fortesa') + '</p>' +
+      tg(t(['Déclarations de TVA', 'Numérisation et archivage comptable', 'Paie des prestataires', 'Suivi ITIE', 'Présences et congés'],
+        ['VAT returns', 'Accounting document scanning and archiving', 'Contractor payroll', 'EITI reporting', 'Attendance and leave']))),
+    pg(t('Boîte à outils', 'Toolbox'), t('Outils', 'Tools'), tg(t(['Excel (avancé, hors macros)', 'Sage (recherche et vérification)', 'SYSCOHADA', 'Python (autodidacte, scripts)', 'Word', 'PowerPoint'],
+      ['Excel (advanced, no macros)', 'Sage (lookups and checks)', 'SYSCOHADA', 'Python (self-taught, scripts)', 'Word', 'PowerPoint']))),
+    pg(t('Humain', 'People'), t('Langues et savoir-être', 'Languages and soft skills'), '<div class="tg">' + tg(t(['Français : C2', 'Anglais : B2', 'Wolof : courant'], ['French: C2', 'English: B2', 'Wolof: fluent'])) + '</div><div style="height:1em"></div>' +
+      tg(t(['Logique', 'Rigueur', 'Esprit analytique', 'Organisation', "Travail d'équipe"], ['Logic', 'Rigour', 'Analytical mind', 'Organisation', 'Teamwork'])))
+  ];
+  if (id === 'exp') return [
+    '<div class="pgin"><div class="period">' + t('Depuis le 1er février 2026', 'Since 1 February 2026') + '</div><h3 class="role">' + t('Assistant financier stagiaire', 'Financial Assistant Intern') + '</h3><span class="co">Fortesa International Sénégal</span>' +
+      '<p>' + t("Entreprise pétrolière (production, traitement, transport et commercialisation). J'assiste la personne en charge de la fiscalité pétrolière, des RH et de l'ITIE, ainsi que le comptable. Je ne réalise pas de saisie comptable.",
+        'Oil company (production, processing, transport and marketing). I assist the person in charge of petroleum taxation, HR and EITI, as well as the accountant. I do not carry out accounting entries.') + '</p>' +
+      ul([t("Numérisation des factures, chèques et pièces comptables, et classement des originaux selon l'ordre d'archivage du comptable, dans le cadre de la réorganisation des archives.",
+        "Scanning invoices, cheques and accounting documents, and filing the originals in the accountant's archive order, as part of the archive reorganisation."),
+        t("TVA : reprise de la TVA de chaque opération de 2024 et 2025, et dépôt des déclarations d'avril, mai et juin auprès des impôts.",
+          'VAT: reviewed the VAT of every transaction for 2024 and 2025, and filed the April, May and June returns at the tax office.')]) + '</div>',
+    '<div class="pgin"><div class="lbl pe">Fortesa</div>' + ul([
+      t("Paie des prestataires : mise à jour et contrôle des fiches de pointage ou de débours manquantes, préparation des enveloppes de 2 groupes (24 et 10 personnes), en appui au classeur Excel de mon responsable.",
+        "Contractor payroll: updated and checked missing timesheets and expense sheets, and prepared the envelopes for 2 groups (24 and 10 people), supporting my supervisor's Excel workbook."),
+      t("ITIE : contribution au classeur de la convention de novembre (15 tiers fournisseurs).", 'EITI: contributed to the November agreement workbook (15 supplier third parties).'),
+      t('Brouillon des sommes dues à 40 prestataires.', 'Drafted the amounts due to 40 contractors.'),
+      t("Audit : récupération et numérisation des documents de 2018 à 2024, puis tableau Excel des totaux mensuels réalisé en 2 jours.", 'Audit: retrieved and scanned the documents from 2018 to 2024, then built an Excel table of monthly totals in 2 days.'),
+      t('Pointage des présences et tenue du calendrier des congés.', 'Tracking attendance and maintaining the leave calendar.')]) + '</div>',
+    '<div class="pgin"><div class="period">' + t('Juillet à août 2023', 'July to August 2023') + '</div><h3 class="role">' + t('Stagiaire', 'Intern') + '</h3><span class="co">Fortesa International Sénégal</span><p>' +
+      t('Apprentissage du Code pétrolier sénégalais, révision des procédures comptables du secteur pétrolier.', 'Learned the Senegalese Petroleum Code and reviewed accounting procedures in the oil sector.') + '</p></div>'
+  ];
+  if (id === 'edu') return [
+    '<div class="pgin"><div class="period">2025</div><h3 class="role">' + t('Master en Sciences Économiques et de Gestion', "Master's in Economics and Management") + '</h3><p>' +
+      t('Spécialisation en Gestion des Institutions Financières. Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.', 'Specialisation in Financial Institutions Management. Cheikh Anta Diop University, Polytechnic School of Dakar.') + '</p></div>',
+    '<div class="pgin"><div class="period">2023</div><h3 class="role">' + t('Licence en Sciences Économiques et de Gestion', "Bachelor's in Economics and Management") + '</h3><p>' +
+      t('Majeure en Banque, Finance et Assurance. Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.', 'Major in Banking, Finance and Insurance. Cheikh Anta Diop University, Polytechnic School of Dakar.') + '</p></div>'
+  ];
+  if (id === 'projects') return [
+    pj(t('Mémoire', 'Thesis'),
+      t("Impact de la personnalisation client via la gestion de la relation clientèle sur les indicateurs de performance commerciale chez Ecobank. Mention Bien.",
+        'Impact of customer personalisation through customer relationship management on commercial performance indicators at Ecobank. Graded Bien (Good).'),
+      t('Résultats', 'Results'),
+      [[t('Programme Ellever, clientes', 'Ellever programme, clients'), '529 → 2 037', '2021 → 2024'],
+       [t('ROE Ecobank', 'Ecobank ROE'), '40 % → 44 %', '2022 → 2023']],
+      t("Étude qualitative (entretiens semi-directifs) : la segmentation et les outils CRM sont en place chez Ecobank Sénégal, et le programme Ellever compte 879 clientes financées (43 %). Mais aucun lien direct n'est formalisé entre le CRM et les indicateurs de performance, freiné par la qualité des données et la résistance au changement.",
+        'Qualitative study (semi-structured interviews): segmentation and CRM tools are in place at Ecobank Senegal, and the Ellever programme has 879 financed clients (43%). But no direct link is formalised between the CRM and performance indicators, held back by data quality and resistance to change.'),
+      'documents/memoire-makhtar-faye.pdf'),
+    pj(t('Projet de groupe, Master', "Group project, Master's"),
+      t('Recherche sur les mécanismes du crédit indirect, réalisée en travail de groupe (Master GIF, Groupe 5).', "Research on how indirect credit works, carried out as a group project (Master's in Financial Institutions Management, Group 5)."),
+      t('Constat', 'Finding'),
+      [[t('Microfinance au Sénégal', 'Microfinance in Senegal'), '1980 → 2011', ''],
+       [t('Court terme, croissance du PIB', 'Short term, GDP growth'), t('Effet négatif', 'Negative effect'), ''],
+       [t('Long terme, masse monétaire M2', 'Long term, money supply M2'), t('Effet positif', 'Positive effect'), '']],
+      t("L'étude citée (1980 à 2011) indique que le crédit des institutions de microfinance pèse négativement sur la croissance du PIB à court terme, puis contribue positivement à la masse monétaire M2 à long terme. Le travail conclut que le crédit indirect est un levier stratégique, sous réserve d'une gestion prudente des risques.",
+        'The study cited (1980 to 2011) indicates that microfinance credit weighs negatively on GDP growth in the short term, then contributes positively to the M2 money supply in the long term. The work concludes that indirect credit is a strategic lever, provided risks are managed prudently.'),
+      'documents/credit-indirect-groupe5.pdf'),
+    pj(t('Projet de groupe, Master', "Group project, Master's"),
+      t("Simulation d'entreprise : diagnostic concurrentiel, mix marketing 7P et plan d'action sur 12 mois pour une banque digitale sénégalaise (Master GIF).", "Business simulation: competitive diagnosis, 7P marketing mix and a 12-month action plan for a Senegalese digital bank (Master's in Financial Institutions Management)."),
+      t('Objectifs visés', 'Targets set'),
+      [[t('Point de départ de la banque', "The bank's starting point"), '6 % / 4 %', t('dépôts / crédits', 'deposits / loans')],
+       [t('Dépôts retail', 'Retail deposits'), '+12 à 20 %', t('en 12 mois', 'in 12 months')],
+       [t('Comptes avec appli activée', 'Accounts with app activated'), '≥ 60 %', '']],
+      t("Le diagnostic situe la banque GIF à 6 % des dépôts et 4 % des crédits, avec une application peu utilisée. Le plan sur 12 mois vise +12 à 20 % de dépôts retail, au moins 60 % de comptes avec l'appli activée et +10 % de rétention (cibles indicatives, à valider).",
+        'The diagnosis places bank GIF at 6% of deposits and 4% of loans, with a little-used app. The 12-month plan aims for retail deposits up 12 to 20%, at least 60% of accounts with the app activated and 10% higher retention (indicative targets, to be validated).'),
+      'documents/digi-teranga-marketing-bancaire.pdf'),
+    pj(t('Examen, Master 2', 'Exam, Master 2'),
+      t("Analyse de cinq dossiers de crédit : diagnostic financier, calcul des ratios et recommandation de financement pour chaque cas (Master GIF).", "Analysis of five credit files: financial diagnosis, ratio calculation and a financing recommendation for each case (Master's in Financial Institutions Management)."),
+      t('Ratios calculés', 'Ratios calculated'),
+      [[t('AMSOLO, autonomie financière', 'AMSOLO, financial autonomy'), '71 %', ''],
+       [t('AMSOLO, rentabilité éco. / fin.', 'AMSOLO, economic / financial return'), '48,8 % / 10,1 %', ''],
+       [t('Cas 3, autonomie financière', 'Case 3, financial autonomy'), '5,5 %', t('endettement 1 719 %', 'debt ratio 1,719%')],
+       [t('Cas 5, taux d\'effort', 'Case 5, debt-to-income'), '33,9 %', '']],
+      t("Pour chaque dossier, le type de crédit est adapté à la nature du besoin : moyen terme amortissable de 24 à 36 mois avec garanties pour les deux entreprises solides, refus du moyen terme pour la structure fragile sans restructuration, et acceptation conditionnelle pour les deux particuliers.",
+        "For each file, the type of credit is matched to the nature of the need: an amortising medium-term loan of 24 to 36 months with guarantees for the two sound companies, no medium-term loan for the fragile structure without restructuring, and conditional acceptance for the two individuals."),
+      'documents/analyse-bancaire-credit-master2.pdf'),
+    pj(t('Projet de groupe, Master', "Group project, Master's"),
+      t("Étude du crédit bancaire au Sénégal et dans l'UEMOA : mécanismes de gestion du risque, freins à l'accès au crédit et perspectives (Master GIF).", "Study of bank credit in Senegal and the WAEMU zone: risk management mechanisms, barriers to credit access and outlook (Master's in Financial Institutions Management)."),
+      t('Chiffres du contexte', 'Context figures'),
+      [[t('Créances en souffrance nettes', 'Net non-performing loans'), '3,4 % → 4,2 %', t('Sénégal', 'Senegal')],
+       [t('Total de bilan des banques UEMOA', 'WAEMU banks total assets'), '+9,3 %', '2024'],
+       [t('Crédits à la clientèle', 'Customer loans'), '+5,6 %', '2024'],
+       [t('Coût moyen du crédit', 'Average cost of credit'), '6,78 %', t('mars 2025', 'March 2025')]],
+      t("Le crédit reste un levier de croissance, freiné par des taux élevés, des garanties excessives et des lenteurs de procédure. Le travail retient comme pistes la loi bancaire de 2025, les fintechs et le scoring alternatif.",
+        "Credit remains a growth lever, held back by high rates, excessive collateral and slow procedures. The work points to the 2025 banking law, fintechs and alternative scoring as ways forward."),
+      'documents/droit-bancaire-credits.pdf'),
+    pj(t('Dissertation, Master', "Dissertation, Master's"),
+      t("L'analyse de la décision de la hausse des taux directeurs de la BCEAO en décembre 2023 dans le cadre du droit communautaire (Master GIF, Groupe 1).", "Analysis of the BCEAO's December 2023 decision to raise its policy rates under community law (Master's in Financial Institutions Management, Group 1)."),
+      t('Points clés', 'Key points'),
+      [[t('Date de la décision', 'Date of the decision'), t('Décembre 2023', 'December 2023'), ''],
+       [t('Organe décisionnaire', 'Deciding body'), t('Comité de politique monétaire', 'Monetary Policy Committee'), ''],
+       [t('Nature juridique', 'Legal nature'), t('Droit communautaire dérivé', 'Derived community law'), ''],
+       [t('Recours possible', 'Possible appeal'), t('Cour de Justice de l\'UEMOA', 'WAEMU Court of Justice'), '']],
+      t("La dissertation établit que la hausse relève d'une décision du Comité de politique monétaire, acte obligatoire de droit dérivé fondé sur les traités de l'UEMOA. Elle en examine l'impact sur le coût du crédit et les limites du pouvoir du Comité, et conclut à un enjeu de transparence et de concertation avec les États membres.",
+        "The dissertation establishes that the rise is a decision of the Monetary Policy Committee, a binding act of derived law based on the WAEMU treaties. It examines the impact on the cost of credit and the limits of the Committee's power, and concludes that transparency and consultation with member states are at stake."),
+      'documents/dissertation-bceao.pdf'),
+    pj(t('Étude de cas, Master', "Case study, Master's"),
+      t("Analyse du cas Club Med en management stratégique : culture, succès, difficultés et plans de redressement (Master GIF, Groupe 5).", "Club Med case analysis in strategic management: culture, success, difficulties and turnaround plans (Master's in Financial Institutions Management, Group 5)."),
+      t('Repères du cas', 'Case milestones'),
+      [[t('Création du Club Med', 'Club Med founded'), '1950', ''],
+       [t('Succès du modèle', 'Model success'), '1950 → 1990', ''],
+       [t('Difficultés', 'Difficulties'), t('Début des années 1990', 'Early 1990s'), ''],
+       [t('Plans étudiés', 'Plans studied'), t('Bourguignon, Giscard d\'Estaing', 'Bourguignon, Giscard d\'Estaing'), '']],
+      t("L'étude attribue le succès à une culture communautaire et au concept de vacances tout compris, puis les difficultés à des problèmes financiers, à la concurrence et à des attentes clients nouvelles. Le plan Bourguignon a échoué faute de positionnement clair, alors que la montée en gamme de Giscard d'Estaing paraît mieux adaptée.",
+        "The study attributes the success to a community culture and the all-inclusive concept, then the difficulties to financial problems, competition and new customer expectations. The Bourguignon plan failed for lack of a clear positioning, whereas Giscard d'Estaing's move upmarket appears better suited."),
+      'documents/club-med-groupe5.pdf'),
+    pj(t('Projet tutoré, Licence', 'Tutored project, Bachelor\'s'),
+      t("Amélioration de la stratégie commerciale du Comptoir Commercial Bara Mboup automobile (CCBM Automobile), Licence Banque, Finance, Assurance.", "Improving the commercial strategy of Comptoir Commercial Bara Mboup automobile (CCBM Automobile), Bachelor's in Banking, Finance and Insurance."),
+      t('Repères de l\'entreprise', 'Company facts'),
+      [[t('Chiffre d\'affaires', 'Turnover'), '40 ' + t('milliards FCFA', 'billion FCFA'), ''],
+       [t('Capital', 'Share capital'), '12,4 ' + t('milliards FCFA', 'billion FCFA'), ''],
+       [t('Véhicules vendus aux maires', 'Vehicles sold to mayors'), '215', t('Sénégal', 'Senegal')],
+       [t('Pôles du groupe CCBM', 'CCBM group divisions'), '6', '']],
+      t("Le diagnostic (SWOT, PESTEL, SEPO, 5 forces de Porter) relève une concurrence rude, l'absence de catalogue, un manque de visibilité et de notoriété sur les réseaux. Les recommandations portent sur le plan de communication et le marketing digital (référencement, emailing).",
+        "The diagnosis (SWOT, PESTEL, SEPO, Porter's 5 forces) points to fierce competition, no catalogue, and a lack of visibility and social-media presence. Recommendations cover the communication plan and digital marketing (SEO, emailing)."),
+      [['documents/ccbm-automobile-rapport.pdf', t('Rapport', 'Report')], ['documents/ccbm-automobile-soutenance.pdf', t('Soutenance', 'Defence slides')]]),
+    pg(t('Projets de groupe, Licence', "Group projects, Bachelor's"), t('Deux travaux de Licence', "Two Bachelor's projects"),
+      '<div class="pcard"><p><b>' + t("Impact sur la relation client personnelle des banques", "Impact on banks' personal customer relationships") + '</b><br>' + t("Étude de l'impact sur le rapport client personnel des banques, avec Ecobank comme cas.", 'Study of the impact on the personal customer relationship in banks, with Ecobank as the case.') + '</p></div>' +
+      '<div class="pcard"><p><b>' + t('Simulation de création de produit bancaire', 'Banking product creation simulation') + '</b><br>' + t("Simulation de création d'un produit bancaire et élaboration de son plan marketing.", 'Simulation of creating a banking product and drafting its marketing plan.') + '</p></div>')
+  ];
+  return [
+    pg(t('Écrire', 'Write'), t('Parlons-en', "Let's talk"),
+      '<p>' + t("Ouvert aux opportunités en finance et en analyse de données, à Dakar comme à l'international.", 'Open to opportunities in finance and data analysis, in Dakar and internationally.') + '</p>' +
+      '<div class="facts"><b>Email</b><a href="mailto:mak.faye17@outlook.com">mak.faye17@outlook.com</a><b>LinkedIn</b><a href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">linkedin.com/in/makhtar-faye</a><b>' + t('Lieu', 'Based in') + '</b><span>' + t('Dakar, Sénégal', 'Dakar, Senegal') + '</span></div>'),
+    pg('Documents', t('Mon CV', 'My CV'), '<p>' + t('Deux versions du CV, avec photo.', 'Two versions of my CV, with photo.') + '</p>' +
+      pdfBtn('cv-makhtar-faye-fr.pdf', t('CV en français', 'CV in French')) + '<br>' + pdfBtn('cv-makhtar-faye-en.pdf', t('CV en anglais', 'CV in English')))
+  ];
+}
+
+/* ================= SHELF / ARC ENGINE ================= */
+var $ = function (id) { return document.getElementById(id); };
+var stage = $('stage'), shelf = $('shelf'), detail = $('detail');
+var COPIES = 3, TOT = N * COPIES;
+var tapes = [];
+for (var v = 0; v < TOT; v++) {
+  var el = document.createElement('div'); el.className = 'tape'; el.dataset.v = v;
+  var sp = document.createElement('div'); sp.className = 'face sp';
+  var cv = document.createElement('div'); cv.className = 'face cv';
+  el.appendChild(sp); el.appendChild(cv); stage.appendChild(el);
+  tapes.push({ el: el, sp: sp, cv: cv, i: v % N, r: 99, lift: 0, hover: false, vis: true });
+  (function (tp) {
+    el.addEventListener('pointerenter', function () { tp.hover = true; });
+    el.addEventListener('pointerleave', function () { tp.hover = false; });
+  })(tapes[v]);
+}
+function renderFaces() {
+  tapes.forEach(function (tp) { tp.sp.innerHTML = spineSVG(tp.i); tp.cv.innerHTML = coverSVG(tp.i, false); });
+}
+
+var H = 400, ws = 67, d = 211, gap = 14, U = 520, P = 1400, W = innerWidth, cyPx = innerHeight * .41;
+var XS = [];
+function measure() {
+  var probe = document.createElement('div'); probe.style.cssText = 'position:fixed;left:-99px;top:0;width:1px;height:var(--H);visibility:hidden';
+  document.body.appendChild(probe); H = probe.getBoundingClientRect().height; probe.remove();
+  ws = H * 142 / 840; d = H * 474 / 900; gap = H * .035; W = innerWidth;
+  U = W < 768 ? H * 1.05 : H * 1.3;
+  cyPx = innerHeight * (W < 768 ? .43 : .41);
+  stage.style.setProperty('--ws', ws + 'px'); stage.style.setProperty('--d', d + 'px');
+  XS = [0]; for (var k = 0; k < Math.ceil(U * 3 / 2); k++) { var u = k * 2; XS.push(XS[k] + 2 / (1 + Math.pow(u / U, 1.6))); }
+}
+function scl(u) { return 1 / (1 + Math.pow(Math.abs(u) / U, 1.6)); }
+function xsc(u) { var a = Math.abs(u) / 2, k = Math.floor(a); if (k >= XS.length - 1) return (u < 0 ? -1 : 1) * XS[XS.length - 1]; return (u < 0 ? -1 : 1) * (XS[k] + (XS[k + 1] - XS[k]) * (a - k)); }
+function B(r) { return Math.abs(r) < 1 ? (r + Math.sin(Math.PI * r) / Math.PI) / 2 : (r < 0 ? -.5 : .5); }
+function F(r) { return r * (ws + gap) + (d - ws + 1.4 * gap) * B(r); }
+function sm(x) { return x * x * (3 - 2 * x); }
+function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+
+var s = 0 + N, T = s, active = 0, dragging = false, isOpen = false;
+var mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my, tiltX = 0, tiltY = 0, onCover = false;
+var wheelTimer = 0;
+
+/* ---- caption ---- */
+function swap(mask, text, dir, instant) {
+  var spans = mask.querySelectorAll('span');
+  var n = document.createElement('span'); n.textContent = text;
+  if (instant || RM) { mask.innerHTML = ''; mask.appendChild(n); return; }
+  spans.forEach(function (o) {
+    if (o.dataset.leaving) return;
+    o.dataset.leaving = '1'; o.classList.add('out');
+    var a = o.animate([{ transform: 'translateY(' + (-dir * 105) + '%)' }], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' });
+    a.onfinish = function () { o.remove(); };
+  });
+  mask.appendChild(n);
+  n.animate([{ transform: 'translateY(' + (dir * 105) + '%)' }, { transform: 'translateY(0)' }], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' });
+}
+function yearLine(i) { var n = i + 1; return (n < 10 ? '0' : '') + n + ' / 06 · ' + meta(i).tag; }
+function setCaption(i, dir, instant) {
+  var m = meta(i);
+  swap($('mTitle'), m.title, dir, instant); swap($('mSub'), m.sub, dir, instant); swap($('mYear'), yearLine(i), dir, instant);
+  $('mTitle').firstElementChild.className = 'c-title'; $('mSub').lastElementChild.className = 'lbl c-sub'; $('mYear').lastElementChild.className = 'c-year';
+  [$('mTitle'), $('mSub'), $('mYear')].forEach(function (mk, k) { var cls = ['c-title', 'lbl c-sub', 'c-year'][k]; mk.querySelectorAll('span').forEach(function (sp) { sp.className = cls + (sp.classList.contains('out') ? ' out' : ''); }); });
+}
+
+/* ---- timeline ---- */
+var tl = $('tline'), tdot = $('tdot'), dotPos = 0, tnEls = [];
+(function buildTL() {
+  for (var k = 0; k <= (N - 1) * 5; k++) {
+    var tk = document.createElement('i'); tk.className = 'tk' + (k % 5 === 0 ? ' mj' : ''); tk.style.left = (k / ((N - 1) * 5) * 100) + '%'; tl.insertBefore(tk, tdot);
+  }
+  for (var i = 0; i < N; i++) {
+    var tn = document.createElement('span'); tn.className = 'tn lbl' + (i === N - 1 ? ' last' : '') + (i % 2 ? ' alt' : ''); tn.style.left = (i / (N - 1) * 100) + '%'; tl.insertBefore(tn, tdot); tnEls.push(tn);
+  }
+})();
+function labelTL() { tnEls.forEach(function (e, i) { e.textContent = ((i + 1 < 10 ? '0' : '') + (i + 1)) + ' ' + meta(i).nav; }); }
+
+/* ---- inputs ---- */
+function wrapDelta(i) { var dlt = ((i - active) % N + N) % N; if (dlt > N / 2) dlt -= N; return dlt; }
+function goTo(i) { T = Math.round(T) + wrapDelta(i); }
+$('prev').addEventListener('click', function () { T = Math.round(T) - 1; });
+$('next').addEventListener('click', function () { T = Math.round(T) + 1; });
+$('play').addEventListener('click', function () { openBook(); });
+$('thit').addEventListener('click', function (e) { var r = $('thit').getBoundingClientRect(); goTo(Math.round(clamp((e.clientX - r.left) / r.width, 0, 1) * (N - 1))); });
+
+var down = null, moved = false, T0 = 0;
+shelf.addEventListener('pointerdown', function (e) { down = { x: e.clientX }; T0 = T; moved = false; });
+window.addEventListener('pointermove', function (e) {
+  mx = e.clientX; my = e.clientY;
+  if (down && !isOpen) {
+    var dx = e.clientX - down.x;
+    if (!moved && Math.abs(dx) > 5) { moved = true; dragging = true; }
+    if (moved) T = T0 - dx / (ws + gap);
+  }
+  var tg = e.target.closest ? e.target : null;
+  var c = $('cur'); c.classList.remove('spine', 'btn');
+  if (tg) {
+    if (tg.closest('a,button,#thit')) c.classList.add('btn');
+    else { var tp = tg.closest('.tape'); if (tp && !isOpen && Math.abs(tapes[+tp.dataset.v].r) > .5) c.classList.add('spine'); }
+  }
+  if (isOpen) c.classList.remove('open');
+});
+window.addEventListener('pointerup', function () {
+  if (down && moved) { T = Math.round(T); setTimeout(function () { moved = false; }, 0); }
+  down = null; dragging = false;
+});
+shelf.addEventListener('click', function (e) {
+  if (moved) return;
+  var tp = e.target.closest('.tape'), o = tp ? tapes[+tp.dataset.v] : null;
+  if (!o) { /* 3D hit-testing can miss: fall back to the book whose faces contain the pointer */
+    tapes.forEach(function (q) {
+      [q.cv, q.sp].forEach(function (f) {
+        var r = f.getBoundingClientRect();
+        if (r.width > 4 && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && (!o || Math.abs(q.r) < Math.abs(o.r))) o = q;
+      });
+    });
+  }
+  if (!o) return;
+  if (Math.abs(o.r) < .5) openBook(); else T = Math.round(T + o.r);
+});
+window.addEventListener('wheel', function (e) {
+  if (isOpen) return; e.preventDefault();
+  var dl = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  T += dl / (ws + gap) * .5; clearTimeout(wheelTimer); wheelTimer = setTimeout(function () { T = Math.round(T); }, 160);
+}, { passive: false });
+window.addEventListener('keydown', function (e) {
+  if (isOpen) {
+    if (e.key === 'Escape') closeBook();
+    else if (e.key === 'ArrowRight') setF(F_ + 1); else if (e.key === 'ArrowLeft') setF(F_ - 1);
+    return;
+  }
+  if (e.key === 'ArrowRight') T = Math.round(T) + 1; else if (e.key === 'ArrowLeft') T = Math.round(T) - 1;
+  else if (e.key === 'Enter' && (document.activeElement === document.body)) openBook();
+});
+
+/* ---- frame loop ---- */
+var last = performance.now(), capActive = -1, inkOn = false, inkStart = 0, blobs = [];
+function frame(now) {
+  requestAnimationFrame(frame);
+  var dt = Math.min(.05, (now - last) / 1000); last = now;
+  var k = dragging ? 18 : 5.2, f = RM ? 1 : 1 - Math.exp(-k * dt);
+  s += (T - s) * f; if (Math.abs(T - s) < 1e-4) s = T;
+  if (Math.abs(s) > 4 * TOT) { var sh = Math.round(s / TOT) * TOT; s -= sh; T -= sh; }
+  var a = ((Math.round(s) % N) + N) % N;
+  if (a !== capActive) { var dir = T - s === 0 ? 1 : (T - s > 0 ? 1 : -1); setCaption(a, capActive < 0 ? 1 : dir, capActive < 0); if (capActive >= 0) window.dispatchEvent(new Event('sfx-shelf')); capActive = a; active = a; }
+
+  var cvW = d, onc = !isOpen && Math.abs(mx - W / 2) < .55 * cvW && Math.abs(my - cyPx) < .55 * H && Math.abs(T - s) < .3;
+  onCover = onc;
+  var tyT, txT;
+  if (onc) { tyT = (mx - W / 2) / (.55 * cvW) * 8; txT = -(my - cyPx) / (H / 2) * 5; } else { tyT = (mx - W / 2) / W * 4; txT = 0; }
+  var tf = RM ? 1 : 1 - Math.exp(-7 * dt); tiltY += (tyT - tiltY) * tf; tiltX += (txT - tiltX) * tf;
+
+  for (var vi = 0; vi < TOT; vi++) {
+    var tp = tapes[vi], r = vi - s; r = ((r % TOT) + TOT) % TOT; if (r > TOT / 2) r -= TOT; tp.r = r;
+    var o = sm(Math.max(0, 1 - Math.abs(r))), u = F(r);
+    if (Math.abs(u) > U * 1.95) { if (tp.vis) { tp.el.style.visibility = 'hidden'; tp.vis = false; } continue; }
+    if (!tp.vis) { tp.el.style.visibility = 'visible'; tp.vis = true; }
+    var tgt = (tp.hover && Math.abs(r) > .5) ? 1 : 0; tp.lift += (tgt - tp.lift) * (RM ? 1 : 1 - Math.exp(-12 * dt));
+    var sc = scl(u), kk = 1 / sc;
+    var z = P * (1 - kk) + o * H * .1, x = xsc(u) * kk;
+    var y = (H * .5 * (1 - sc) * .42 + o * H * .012 - tp.lift * H * .05) * kk;
+    var ry = (u < 0 ? -1 : 1) * Math.min(1, Math.abs(u) / U) * 26 * (1 - o) - 90 * o + tiltY * o, rx = tiltX * o;
+    tp.el.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,' + z.toFixed(2) + 'px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    tp.el.style.zIndex = Math.round(3000 + z);
+    tp.sp.style.setProperty('--shade', Math.min(.6, o * .55 + (1 - sc) * .32).toFixed(3));
+    tp.cv.style.setProperty('--shade', ((1 - o) * .82).toFixed(3));
+  }
+  /* play ring */
+  var ps = isOpen ? 0 : sm(Math.max(0, 1 - Math.abs(T - s) * 3)), pl = $('play');
+  pl.style.left = (W / 2 - d / 2 - 6 - 21) + 'px'; pl.style.top = (cyPx + .36 * H - 21) + 'px'; pl.style.transform = 'scale(' + ps.toFixed(3) + ')';
+  pl.style.pointerEvents = ps > .5 ? 'auto' : 'none';
+  /* timeline dot */
+  var base = Math.floor(s), fr = s - base, ia = ((base % N) + N) % N, ib = (ia + 1) % N, pos;
+  if (ia === N - 1) pos = fr < .5 ? N - 1 : 0; else pos = ia + fr;
+  var tgtp = pos / (N - 1) * 100;
+  if (Math.abs(tgtp - dotPos) > 100 / (N - 1) * 1.5 || RM) dotPos = tgtp; else dotPos += (tgtp - dotPos) * (1 - Math.exp(-14 * dt));
+  tdot.style.left = dotPos + '%';
+  /* cursor */
+  cx += (mx - cx) * (1 - Math.exp(-16 * dt)); cy += (my - cy) * (1 - Math.exp(-16 * dt));
+  var cu = $('cur'); cu.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+  if (!isOpen && onc && !cu.classList.contains('btn')) cu.classList.add('open'); else cu.classList.remove('open');
+  /* ink */
+  if (inkOn) {
+    var el = now - inkStart;
+    blobs.forEach(function (b) { var p = clamp((el - b.d) / 1250, 0, 1); b.el.setAttribute('r', (720 * (1 - Math.pow(1 - p, 3))).toFixed(1)); });
+    if (el > 2800) inkOn = false;
+  }
+}
+
+/* ================= READER (physical page turning) ================= */
+var leaves = [], F_ = 0, zt = 0, spread = true, curBook = 0;
+function sizeReader() {
+  var Wd = innerWidth, Hh = innerHeight, stacked = Wd < 768; spread = Wd >= 1000;
+  var ph, cw, ch, pw, bw;
+  if (stacked) { ch = Math.min(Hh * .26, 230); cw = ch * 474 / 900; ph = Math.min(Hh * .56, 520); pw = Math.min(Wd * .86, ph * .8); bw = pw; }
+  else { ph = clamp(Math.min(Hh - 340, 560), 300, 560); ch = ph; cw = ph * 474 / 900; var avail = Wd * .86 - cw - 44; pw = Math.min(spread ? avail / 2 : avail, ph * .8); bw = spread ? pw * 2 : pw; }
+  detail.style.setProperty('--ph', ph + 'px'); detail.style.setProperty('--pw', pw + 'px'); detail.style.setProperty('--bw', bw + 'px');
+  detail.style.setProperty('--cw', cw + 'px'); detail.style.setProperty('--ch', ch + 'px');
+}
+function blank() { return '<div class="pgin mid"><span class="mark">MAKHTAR FAYE</span></div>'; }
+function arrowSVG(dir) { return dir < 0 ? '<svg viewBox="0 0 24 12"><path d="M6 1L1 6l5 5M1 6h23"/></svg>' : '<svg viewBox="0 0 24 12"><path d="M18 1l5 5-5 5M23 6H0"/></svg>'; }
+function buildReader(keepF) {
+  sizeReader();
+  var pgs = pages(curBook), folio = function (n) { return '<span class="folio">' + (n < 10 ? '0' : '') + n + '</span>'; };
+  var h = '<div class="book" id="book">';
+  var m = meta(curBook);
+  if (spread) h += '<div class="pbase bl"><div class="pgin mid"><span class="lbl pe">MAKHTAR FAYE</span><span class="mark" style="font-size:clamp(22px,calc(var(--pw)/9),44px)">' + m.title + '</span></div></div><div class="pbase br" style="left:var(--pw)">' + blank() + '</div>';
+  else h += '<div class="pbase br" style="left:0">' + blank() + '</div>';
+  var lv = [];
+  if (spread) { for (var k = 0; k < Math.ceil(pgs.length / 2); k++) lv.push([pgs[2 * k], pgs[2 * k + 1] || blank(), 2 * k + 1, 2 * k + 2]); }
+  else { for (var q = 0; q < pgs.length; q++) lv.push([pgs[q], blank(), q + 1, 0]); }
+  lv.forEach(function (x, i) {
+    h += '<div class="leaf" data-i="' + i + '" style="left:' + (spread ? 'var(--pw)' : '0') + '"><div class="pf">' + x[0] + folio(x[2]) + '</div><div class="pb">' + x[1] + (x[3] ? folio(x[3]) : '') + '</div></div>';
+  });
+  h += '</div><div class="dctrl"><button id="rPrev" aria-label="' + t('Page précédente', 'Previous page') + '">' + arrowSVG(-1) + '</button><span class="lbl" id="rCount"></span><button id="rNext" aria-label="' + t('Page suivante', 'Next page') + '">' + arrowSVG(1) + '</button></div>';
+  $('dRead').innerHTML = h;
+  leaves = [].slice.call($('dRead').querySelectorAll('.leaf'));
+  F_ = clamp(keepF || 0, 0, leaves.length);
+  leaves.forEach(function (lf, i) {
+    lf.addEventListener('click', function (e) { if (e.target.closest('a')) return; if (e.target.closest('.pf')) setF(i + 1); else setF(i); });
+  });
+  $('rPrev').addEventListener('click', function () { setF(F_ - 1); }); $('rNext').addEventListener('click', function () { setF(F_ + 1); });
+  layoutZ(true); updateCtrl();
+}
+function layoutZ(init) {
+  leaves.forEach(function (lf, i) {
+    lf.style.zIndex = i < F_ ? i + 1 : leaves.length - i;
+    if (init) { var tr = lf.style.transition; lf.style.transition = 'none'; lf.style.transform = i < F_ ? 'rotateY(-180deg)' : 'rotateY(0deg)'; void lf.offsetWidth; lf.style.transition = tr; }
+  });
+}
+function setF(nf) {
+  if (nf !== F_) window.dispatchEvent(new Event('sfx-page'));
+  nf = clamp(nf, 0, leaves.length); if (nf === F_) return;
+  for (var i = Math.min(F_, nf); i < Math.max(F_, nf); i++) leaves[i].style.zIndex = 1000;
+  F_ = nf;
+  leaves.forEach(function (lf, i) { lf.style.transform = i < F_ ? 'rotateY(-180deg)' : 'rotateY(0deg)'; });
+  clearTimeout(zt); zt = setTimeout(function () { layoutZ(false); }, RM ? 20 : 950);
+  updateCtrl();
+}
+function updateCtrl() {
+  var tot = leaves.length + 1;
+  $('rCount').textContent = (F_ + 1) + ' / ' + tot;
+  $('rPrev').disabled = F_ === 0; $('rNext').disabled = F_ === leaves.length;
+}
+function fillDetail() {
+  var m = meta(curBook);
+  $('dSub').textContent = m.sub; $('dTitle').textContent = m.title; $('dMeta').textContent = yearLine(curBook);
+  $('closeBtn').textContent = t('FERMER / CLOSE', 'CLOSE / FERMER');
+  $('dCover').innerHTML = coverSVG(curBook, true);
+  blobs = [].slice.call($('dCover').querySelectorAll('.blob')).map(function (b) { return { el: b, d: +b.dataset.d }; });
+  buildReader(F_);
+}
+function coverRect() { var tp = null; tapes.forEach(function (x) { if (Math.abs(x.r) < .5) tp = x; }); return (tp || tapes[0]).cv.getBoundingClientRect(); }
+var EASE = 'cubic-bezier(.76,0,.18,1)';
+function openBook() {
+  if (isOpen) return; window.dispatchEvent(new Event('sfx-open')); T = Math.round(T); s = T; isOpen = true; curBook = active; F_ = 0;
+  fillDetail();
+  var rc = coverRect(), Wd = innerWidth, Hh = innerHeight;
+  detail.style.visibility = 'visible'; detail.setAttribute('aria-hidden', 'false'); detail.scrollTop = 0;
+  detail.style.transformOrigin = (rc.left + rc.width / 2) + 'px ' + (rc.top + rc.height / 2) + 'px';
+  detail.animate([
+    { clipPath: 'inset(' + rc.top + 'px ' + (Wd - rc.right) + 'px ' + (Hh - rc.bottom) + 'px ' + rc.left + 'px round 3px)', transform: 'rotate(-4.5deg)' },
+    { clipPath: 'inset(0px 0px 0px 0px round 0px)', transform: 'rotate(0deg)' }
+  ], { duration: RM ? 1 : 1050, easing: EASE, fill: 'both' });
+  [].slice.call(detail.querySelectorAll('.rise')).forEach(function (r, i) {
+    r.animate([{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }], { duration: RM ? 1 : 900, delay: RM ? 0 : 620 + i * 75, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' });
+  });
+  inkStart = performance.now() + (RM ? -5000 : 520); inkOn = true;
+  $('closeBtn').focus({ preventScroll: true });
+}
+function closeBook() {
+  if (!isOpen) return;
+  var rc = coverRect(), Wd = innerWidth, Hh = innerHeight;
+  detail.style.transformOrigin = (rc.left + rc.width / 2) + 'px ' + (rc.top + rc.height / 2) + 'px';
+  var a = detail.animate([
+    { clipPath: 'inset(0px 0px 0px 0px round 0px)', transform: 'rotate(0deg)' },
+    { clipPath: 'inset(' + rc.top + 'px ' + (Wd - rc.right) + 'px ' + (Hh - rc.bottom) + 'px ' + rc.left + 'px round 3px)', transform: 'rotate(-4.5deg)' }
+  ], { duration: RM ? 1 : 850, easing: EASE, fill: 'both' });
+  a.onfinish = function () {
+    detail.style.visibility = 'hidden'; detail.setAttribute('aria-hidden', 'true');
+    detail.getAnimations().forEach(function (x) { x.cancel(); }); inkOn = false; isOpen = false;
+  };
+}
+$('closeBtn').addEventListener('click', closeBook);
+
+/* ================= LANGUAGE ================= */
+function applyLang(l, init) {
+  L = l === 'en' ? 'en' : 'fr';
+  document.documentElement.lang = L; document.title = 'Makhtar Faye | Portfolio';
+  document.querySelectorAll('[data-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === L)); });
+  $('tSub').textContent = t('PORTFOLIO FINANCE ET DATA', 'FINANCE AND DATA PORTFOLIO');
+  $('fLeft').textContent = t('© MAKHTAR FAYE. TOUS DROITS RÉSERVÉS.', '© MAKHTAR FAYE. ALL RIGHTS RESERVED.');
+  $('cvTop').href = 'cv-makhtar-faye-' + L + '.pdf';
+  $('prev').setAttribute('aria-label', t('Précédent', 'Previous')); $('next').setAttribute('aria-label', t('Suivant', 'Next'));
+  $('play').setAttribute('aria-label', t('Ouvrir le livre', 'Open the book'));
+  $('cur').querySelector('.lab span').innerHTML = t('OUVRIR', 'OPEN');
+  renderFaces(); labelTL();
+  if (capActive >= 0) setCaption(capActive, 1, true);
+  if (isOpen) { var ks = F_; var m = meta(curBook); $('dSub').textContent = m.sub; $('dTitle').textContent = m.title; $('dMeta').textContent = yearLine(curBook); $('closeBtn').textContent = t('FERMER / CLOSE', 'CLOSE / FERMER'); var rs = blobs.map(function (b) { return b.el.getAttribute('r'); }); $('dCover').innerHTML = coverSVG(curBook, true); blobs = [].slice.call($('dCover').querySelectorAll('.blob')).map(function (b, i) { b.setAttribute('r', rs[i] || 0); return { el: b, d: +b.dataset.d }; }); buildReader(ks); }
+  try { localStorage.setItem('lang', L); } catch (e) {}
+}
+document.querySelectorAll('[data-lang]').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.dataset.lang); }); });
+
+/* ================= INIT ================= */
+function init() {
+  var saved = null; try { saved = localStorage.getItem('lang'); } catch (e) {}
+  var l0 = saved || ((navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en');
+  measure(); applyLang(l0, true);
+  window.addEventListener('resize', function () { measure(); if (isOpen) buildReader(F_); });
+  requestAnimationFrame(frame);
+}
+(document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 800); })]) : Promise.resolve()).then(init);
+})();
+</script>
+
+<script>
+/* Sound effects: synthesised in the browser (no files, no licence). Follow the SON/SOUND button. */
+window.SFX = (function () {
+  var AC = window.AudioContext || window.webkitAudioContext, ctx, nb, master;
+  function init() {
+    if (ctx) return true; if (!AC) return false;
+    ctx = new AC(); master = ctx.createGain(); master.gain.value = 1; master.connect(ctx.destination);
+    nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate); var d = nb.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return true;
+  }
+  function noise(t, dur, type, f0, f1, q, peak, att) {
+    var s = ctx.createBufferSource(); s.buffer = nb; var f = ctx.createBiquadFilter(); f.type = type; f.Q.value = q;
+    f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    var g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + att); g.gain.exponentialRampToValueAtTime(0.0005, t + dur);
+    s.connect(f); f.connect(g); g.connect(master); s.start(t, Math.random(), dur + 0.05);
+  }
+  function thump(t, f0, f1, dur, peak) {
+    var o = ctx.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    var g = ctx.createGain(); g.gain.setValueAtTime(peak, t); g.gain.exponentialRampToValueAtTime(0.0005, t + dur);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.05);
+  }
+  var kinds = {
+    shelf: function (t) { thump(t, 190, 95, 0.16, 0.34); noise(t, 0.12, 'bandpass', 1800, 700, 0.8, 0.10, 0.01); noise(t + 0.01, 0.07, 'bandpass', 3200, 2200, 1.2, 0.05, 0.005); },
+    open: function (t) {
+      noise(t, 0.55, 'bandpass', 260, 1400, 0.7, 0.22, 0.22); noise(t + 0.05, 0.4, 'highpass', 1200, 3500, 0.5, 0.06, 0.2);
+      thump(t + 0.5, 120, 50, 0.4, 0.36); noise(t + 0.5, 0.12, 'lowpass', 900, 300, 0.6, 0.2, 0.01);
+    },
+    page: function (t) {
+      noise(t, 0.38, 'bandpass', 1700, 4200, 0.6, 0.20, 0.09); noise(t + 0.12, 0.22, 'highpass', 2800, 5200, 0.7, 0.07, 0.04); noise(t + 0.34, 0.08, 'bandpass', 900, 500, 1, 0.08, 0.005);
+    }
+  };
+  var api = { enabled: true, play: function (k) { if (!api.enabled || !init()) return; if (ctx.state === 'suspended') ctx.resume(); kinds[k](ctx.currentTime + 0.01); } };
+  ['shelf', 'open', 'page'].forEach(function (k) { window.addEventListener('sfx-' + k, function () { api.play(k); }); });
+  return api;
+})();
+</script>
+
+<script>
+(function () {
+  /* Music: EN = "Mist in the Mountains", FR = "Contemplation" (Maarten Schellekens). Starts on load, keeps playing inside books. */
+  var SRC = { en: 'audio/en.mp3', fr: 'audio/fr.mp3' }, VOL = 0.5;
+  var btns = [].slice.call(document.querySelectorAll('.snd'));
+  var tr = {}, on = true, cur = null, fades = {};
+  function lang() { return document.documentElement.lang === 'en' ? 'en' : 'fr'; }
+  function get(k) { if (!tr[k]) { var a = new Audio(SRC[k]); a.loop = true; a.preload = 'auto'; a.volume = 0; tr[k] = a; } return tr[k]; }
+  function fade(a, to, ms, done) {
+    clearInterval(fades[a.src]); var from = a.volume, t0 = performance.now();
+    fades[a.src] = setInterval(function () {
+      var k = Math.min(1, (performance.now() - t0) / ms); a.volume = Math.max(0, Math.min(1, from + (to - from) * k));
+      if (k >= 1) { clearInterval(fades[a.src]); if (done) done(); }
+    }, 40);
+  }
+  function label() {
+    var fr = lang() === 'fr';
+    btns.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on);
+      b.setAttribute('aria-label', fr ? (on ? 'Couper la musique' : 'Activer la musique') : (on ? 'Mute the music' : 'Play the music'));
+      b.querySelector('.stx').textContent = fr ? 'SON' : 'SOUND';
+    });
+  }
+  var blocked = false;
+  function play(k, ms) {
+    var a = get(k); cur = k;
+    var p = a.play();
+    if (p && p.catch) p.catch(function () { blocked = true; });
+    fade(a, VOL, ms || 1800);
+  }
+  function switchTo(k) {
+    if (!on || k === cur) return;
+    var old = cur && tr[cur]; if (old) fade(old, 0, 1200, function () { old.pause(); });
+    play(k, 1800);
+  }
+  function setOn(v) {
+    on = v; label(); SFX.enabled = v; try { sessionStorage.setItem('snd', v ? 'on' : 'off'); } catch (e) {}
+    if (v) play(lang(), 1500); else { var a = cur && tr[cur]; if (a) fade(a, 0, 600, function () { a.pause(); }); }
+  }
+  try { if (sessionStorage.getItem('snd') === 'off') on = false; } catch (e) {}
+  SFX.enabled = on;
+  btns.forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); setOn(!on); }); });
+  /* autoplay on load; if the browser refuses, start at the first user gesture */
+  function unlock(e) {
+    if (!on) return cleanup();
+    if (e && e.target && e.target.closest && e.target.closest('.snd')) return;
+    var a = tr[cur || lang()];
+    if (!a || a.paused) { play(lang(), 1500); }
+    cleanup();
+  }
+  function cleanup() { ['pointerdown', 'keydown', 'touchstart'].forEach(function (n) { window.removeEventListener(n, unlock, true); }); }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (n) { window.addEventListener(n, unlock, true); });
+  if (on) play(lang(), 2500);
+  document.addEventListener('visibilitychange', function () {
+    var a = cur && tr[cur]; if (!a || !on) return;
+    if (document.hidden) a.pause(); else a.play().catch(function () {});
+  });
+  new MutationObserver(function () { label(); switchTo(lang()); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  label();
+})();
+</script>
+</body>
+</html>
